@@ -1,1 +1,12 @@
-/* You can add global styles to this file, and also import other style files */
+@import "tailwindcss";
+
+:root {
+  --color-night-900: oklch(18% 0.02 260);
+  --color-night-800: oklch(22% 0.03 260);
+  --color-neon: oklch(65% 0.2 300);
+}
+
+.pixelated { image-rendering: pixelated; }
+.neon-text { text-shadow: 0 0 8px color-mix(in oklab, var(--color-neon) 60%, transparent); }
+
+.bg-night { background-color: var(--color-night-900); }
