@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { CityBackgroundComponent } from './city-background';
 
 type Contact = {
@@ -80,44 +81,35 @@ type Contact = {
       </section>
 
       <!-- Proyectos (tarjetas pixel-art) -->
-      <section class="relative z-10 px-4 mt-12 max-w-4xl mx-auto pb-12">
+      <section class="relative z-10 px-4 mt-12 max-w-6xl mx-auto pb-12">
         <h2 class="text-xl font-bold" style="font-family: 'Press Start 2P', system-ui, sans-serif">Projects</h2>
-        <div class="mt-4 grid gap-4">
+        <div class="mt-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
           @for (p of projects(); track p.title) {
             <a [href]="p.url" target="_blank" rel="noopener noreferrer" 
-               class="group relative rounded-md border border-white/10 bg-[oklch(22%_.03_260)]/80 overflow-hidden block transition-all hover:border-white/30 hover:shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:scale-[1.02]">
-              <!-- Visual placeholder -->
-              <div class="aspect-video relative overflow-hidden bg-gradient-to-br from-purple-900/30 via-blue-900/30 to-indigo-900/30 flex items-center justify-center">
-                <!-- Pixel art decorations -->
-                <div class="absolute inset-0 opacity-20">
-                  <div class="absolute top-4 left-4 w-8 h-8 border-2 border-white/40"></div>
-                  <div class="absolute top-8 right-8 w-6 h-6 border-2 border-purple-400/40"></div>
-                  <div class="absolute bottom-6 left-12 w-4 h-4 bg-blue-400/40"></div>
-                  <div class="absolute bottom-12 right-6 w-10 h-10 border-2 border-indigo-400/40 rotate-45"></div>
-                </div>
-                
-                <!-- Icon -->
-                <div class="relative z-10 text-center">
-                  <svg class="w-16 h-16 mx-auto text-white/60 group-hover:text-white/90 transition-all group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                  </svg>
-                  <p class="mt-2 text-white/40 text-xs group-hover:text-white/60 transition-colors">Click to view live project</p>
-                </div>
-                
+               class="group relative rounded-md border border-white/10 bg-[oklch(22%_.03_260)]/80 overflow-hidden block transition-all hover:border-white/30 hover:shadow-[0_0_20px_rgba(255,255,255,0.1)]">
+              <!-- Preview iframe -->
+              <div class="aspect-video relative overflow-hidden bg-black/50">
+                <iframe 
+                  [src]="getSafeUrl(p.preview)" 
+                  class="w-full h-full pointer-events-none"
+                  loading="lazy"
+                  title="Project preview"
+                  style="transform: translateZ(0); backface-visibility: hidden; -webkit-backface-visibility: hidden;"
+                ></iframe>
                 <div class="absolute inset-0 bg-gradient-to-t from-[oklch(22%_.03_260)] via-transparent to-transparent pointer-events-none"></div>
               </div>
               
               <div class="p-6">
                 <div class="flex items-center justify-between">
-                  <h3 class="font-semibold text-lg group-hover:text-purple-300 transition-colors">{{ p.title }}</h3>
-                  <svg class="w-5 h-5 text-white/50 group-hover:text-purple-400 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <h3 class="font-semibold text-lg">{{ p.title }}</h3>
+                  <svg class="w-5 h-5 text-white/50 group-hover:text-white/90 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
                   </svg>
                 </div>
-                <p class="mt-2 text-white/75 text-sm leading-relaxed">{{ p.description }}</p>
+                <p class="mt-2 text-white/75 text-sm">{{ p.description }}</p>
                 <div class="mt-4 flex flex-wrap gap-2">
                   @for (t of p.tech; track t) {
-                    <span class="inline-flex items-center gap-1.5 px-2 py-1 rounded text-xs bg-black/30 border border-white/10 group-hover:border-purple-500/30 transition-colors">
+                    <span class="inline-flex items-center gap-1.5 px-2 py-1 rounded text-xs bg-black/30 border border-white/10">
                       <i class="text-base" [class]="iconMap()[t] || 'devicon-angular-plain'"></i>
                       {{ t }}
                     </span>
@@ -141,6 +133,8 @@ type Contact = {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HomePage {
+  constructor(private sanitizer: DomSanitizer) {}
+  
   protected readonly name = signal('Saúl Sánchez');
   protected readonly iconMap = signal<Record<string, string>>({
     JavaScript: 'devicon-javascript-plain colored',
@@ -214,7 +208,15 @@ export class HomePage {
       title: 'HelmWeb', 
       description: 'RPO2 helmet monitoring platform with real-time IoT data visualization and safety alerts.', 
       tech: ['Angular', 'TypeScript', 'Tailwind'], 
-      url: 'https://helmweb-rpo2-8hy715wrk-thenotoriousxuls-projects.vercel.app/'
+      url: 'https://helmwebzzl.vercel.app/',
+      preview: 'https://helmwebzzl.vercel.app/'
+    },
+    { 
+      title: 'Lotería Mexicana', 
+      description: 'Traditional Mexican "Corre y Se Va" lottery game with real-time multiplayer, authentication, and interactive gameplay.', 
+      tech: ['Angular', 'TypeScript', 'Tailwind'], 
+      url: 'https://loteria-blush.vercel.app/login',
+      preview: 'https://loteria-blush.vercel.app/login'
     }
   ]);
 
@@ -233,6 +235,10 @@ export class HomePage {
     root.style.setProperty('--px-back', `${y * -0.03}px`);
     root.style.setProperty('--px-mid', `${y * -0.06}px`);
     root.style.setProperty('--px-front', `${y * -0.1}px`);
+  }
+  
+  getSafeUrl(url: string): SafeResourceUrl {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
 }
 
