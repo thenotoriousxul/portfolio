@@ -81,21 +81,30 @@ type Contact = {
       </section>
 
       <!-- Proyectos (tarjetas pixel-art) -->
-      <section class="relative z-10 px-4 mt-12 max-w-6xl mx-auto pb-12">
+      <section class="relative z-10 px-4 mt-12 max-w-4xl mx-auto pb-12">
         <h2 class="text-xl font-bold" style="font-family: 'Press Start 2P', system-ui, sans-serif">Projects</h2>
-        <div class="mt-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div class="mt-4 grid gap-4">
           @for (p of projects(); track p.title) {
             <a [href]="p.url" target="_blank" rel="noopener noreferrer" 
                class="group relative rounded-md border border-white/10 bg-[oklch(22%_.03_260)]/80 overflow-hidden block transition-all hover:border-white/30 hover:shadow-[0_0_20px_rgba(255,255,255,0.1)]">
-              <!-- Preview iframe -->
+              <!-- Preview -->
               <div class="aspect-video relative overflow-hidden bg-black/50">
-                <iframe 
-                  [src]="getSafeUrl(p.preview)" 
-                  class="w-full h-full pointer-events-none"
-                  loading="lazy"
-                  title="Project preview"
-                  style="transform: translateZ(0); backface-visibility: hidden; -webkit-backface-visibility: hidden;"
-                ></iframe>
+                @if (p.isImage) {
+                  <img 
+                    [src]="p.preview" 
+                    [alt]="p.title + ' preview'"
+                    class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-300"
+                    loading="lazy"
+                  />
+                } @else {
+                  <iframe 
+                    [src]="getSafeUrl(p.preview)" 
+                    class="w-full h-full pointer-events-none"
+                    loading="lazy"
+                    title="Project preview"
+                    style="transform: translateZ(0); backface-visibility: hidden; -webkit-backface-visibility: hidden;"
+                  ></iframe>
+                }
                 <div class="absolute inset-0 bg-gradient-to-t from-[oklch(22%_.03_260)] via-transparent to-transparent pointer-events-none"></div>
               </div>
               
@@ -205,18 +214,12 @@ export class HomePage {
 
   protected readonly projects = signal([
     { 
-      title: 'HelmWeb', 
-      description: 'RPO2 helmet monitoring platform with real-time IoT data visualization and safety alerts.', 
-      tech: ['Angular', 'TypeScript', 'Tailwind'], 
-      url: 'https://helmwebzzl.vercel.app/',
-      preview: 'https://helmwebzzl.vercel.app/'
-    },
-    { 
-      title: 'Lotería Mexicana', 
-      description: 'Traditional Mexican "Corre y Se Va" lottery game with real-time multiplayer, authentication, and interactive gameplay.', 
-      tech: ['Angular', 'TypeScript', 'Tailwind'], 
-      url: 'https://loteria-blush.vercel.app/login',
-      preview: 'https://loteria-blush.vercel.app/login'
+      title: 'SINE - Sistema Integral de Educación', 
+      description: 'Comprehensive educational platform for managing students, courses, grades, and administrative tasks at IESIZ.', 
+      tech: ['Angular', 'TypeScript', 'Laravel'], 
+      url: 'https://sine.iesiz.mx/inicio',
+      preview: '/sine.PNG',
+      isImage: true
     }
   ]);
 
