@@ -49,7 +49,11 @@ type Contact = {
             <div class="mt-3 flex flex-wrap gap-2">
               @for (item of category.items; track item.name) {
                 <span class="inline-flex items-center gap-1.5 px-2 py-1 rounded text-xs bg-black/30 border border-white/10">
-                  <i class="text-base" [class]="item.icon"></i>
+                  @if (item.name === 'Angular') {
+                    <span class="text-base font-bold text-red-600">A</span>
+                  } @else {
+                    <i class="text-base" [class]="item.icon"></i>
+                  }
                   {{ item.name }}
                 </span>
               }
@@ -119,7 +123,11 @@ type Contact = {
                 <div class="mt-4 flex flex-wrap gap-2">
                   @for (t of p.tech; track t) {
                     <span class="inline-flex items-center gap-1.5 px-2 py-1 rounded text-xs bg-black/30 border border-white/10">
-                      <i class="text-base" [class]="iconMap()[t] || 'devicon-angular-plain'"></i>
+                      @if (t === 'Angular') {
+                        <span class="text-base font-bold text-red-600">A</span>
+                      } @else {
+                        <i class="text-base" [class]="iconMap()[t] || 'devicon-angular-plain'"></i>
+                      }
                       {{ t }}
                     </span>
                   }
@@ -181,6 +189,7 @@ export class HomePage {
       { name: 'Swift', icon: this.iconMap()['Swift'] },
     ]},
     { title: 'Frameworks', items: [
+      { name: 'Angular', icon: this.iconMap()['Angular'] },
       { name: 'Laravel', icon: this.iconMap()['Laravel'] },
       { name: 'React', icon: this.iconMap()['React'] },
       { name: 'Vue.js', icon: this.iconMap()['Vue.js'] },
