@@ -81,9 +81,9 @@ type Contact = {
       </section>
 
       <!-- Proyectos (tarjetas pixel-art) -->
-      <section class="relative z-10 px-4 mt-12 max-w-4xl mx-auto pb-12">
+      <section class="relative z-10 px-4 mt-12 max-w-6xl mx-auto pb-12">
         <h2 class="text-xl font-bold" style="font-family: 'Press Start 2P', system-ui, sans-serif">Projects</h2>
-        <div class="mt-4 grid gap-4">
+        <div class="mt-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
           @for (p of projects(); track p.title) {
             <a [href]="p.url" target="_blank" rel="noopener noreferrer" 
                class="group relative rounded-md border border-white/10 bg-[oklch(22%_.03_260)]/80 overflow-hidden block transition-all hover:border-white/30 hover:shadow-[0_0_20px_rgba(255,255,255,0.1)]">
@@ -214,11 +214,19 @@ export class HomePage {
 
   protected readonly projects = signal([
     { 
-      title: 'SINE - Sistema Integral de Educación', 
-      description: 'Comprehensive educational platform for managing students, courses, grades, and administrative tasks at IESIZ.', 
+      title: 'SINE - Sistema Integral No Escolarizado', 
+      description: 'Comprehensive platform for managing non-traditional education programs, student enrollment, courses, and administrative tasks at IESIZ.', 
       tech: ['Angular', 'TypeScript', 'Laravel'], 
       url: 'https://sine.iesiz.mx/inicio',
       preview: '/sine.PNG',
+      isImage: true
+    },
+    { 
+      title: 'Zona IESIZ - English Learning Platform', 
+      description: 'Interactive English learning platform with quizzes, exams, activities, and progress tracking for IESIZ students.', 
+      tech: ['PHP', 'Laravel', 'MySQL'], 
+      url: 'https://lince.iesiz.mx/welcome/user',
+      preview: '/zonaiesiz.PNG',
       isImage: true
     }
   ]);
